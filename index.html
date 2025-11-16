@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meditickets Gewinnspiel</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 10px; line-height: 1.4; }
+    input, button, textarea { width: 100%; padding: 10px; margin: 8px 0; font-size: 1rem; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    button { cursor: pointer; }
+    .small { font-size: 0.9rem; color: #555; }
+    .error { color: red; font-weight: bold; }
+  </style>
+</head>
+
+<body>
+  <h2>Willkommen zum Meditickets Gewinnspiel!</h2>
+  <p>
+    Für alle Studis aus Tübingen, die zur fPJ Demo gekommen sind!!<br><br>
+    <strong>Bitte beachten:</strong><br>
+    - Es können nur Medizinstudierende der Uni Tübingen teilnehmen.<br>
+    - Du musst die Umfrage unbedingt vor Ort bei der Demo ausfüllen, damit niemand schummelt (GPS wird einmalig abgefragt).<br>
+    - Wir losen zufällig aus und kontaktieren dich dann per Mail, falls du ein Ticket gewonnen hast.<br><br>
+    Danke, dass ihr euch mit uns zusammen für ein faires PJ stark macht!
+  </p>
+
+  <form id="form">
+    <label>Vorname</label>
+    <input name="first_name" type="text" required placeholder="Max">
+
+    <label>Nachname</label>
+    <input name="last_name" type="text" required placeholder="Mustermann">
+
+    <label>Studentische Mailadresse (@student.uni-tuebingen.de)</label>
+    <input name="email" type="email" required placeholder="max@student.uni-tuebingen.de">
+
+    <label>Standortabfrage (Bitte GPS einschalten und im Browser zustimmen)</label>
+    <p class="small">GPS wird zur Prüfung deiner Anwesenheit verwendet. Ohne GPS können wir die Teilnahme nicht verifizieren.</p>
+    <input type="hidden" name="lat">
+    <input type="hidden" name="lon">
+
+    <label>
+      <input type="checkbox" name="consent" required>
+      Einwilligung zur Datenverarbeitung<br>
+      Ich willige ein, dass meine Angaben (Name, studentische E‑Mail) und mein Standort (Koordinaten, Zeitpunkt) zur Prüfung meiner Anwesenheit und zur Durchführung der Verlosung verarbeitet werden. Die Daten werden ausschließlich für die Verlosung verwendet und spätestens 30 Tage nach Veranstaltung gelöscht. Verantwortliche Stelle: Dominik Hosek, d.hosek@fachschaftmedizin.de. Ich kann meine Einwilligung jederzeit widerrufen.
+    </label>
+
+    <label>
+      <input type="checkbox" name="terms" required>
+      Teilnahmebedingungen / Einmalteilnahme<br>
+      Ich habe die Teilnahmebedingungen gelesen und akzeptiere, dass nur eine Teilnahme pro Person erlaubt ist. Mehrfacheinsendungen können vom Gewinnspiel ausgeschlossen werden.
+    </label>
+
+    <button type="submit">Senden</button>
+    <p id="status" class="small"></p>
+  </form>
+
+  <script>
+    const statusEl = document.getElementById("status");
+    const form = document.getElementById("form");
+
+    function getLocationAndSubmit(e) {
+      e.preventDefault();
+      statusEl.textContent = "GPS wird abgefragt...";
+      if (!navigator.geolocation) {
+        statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Daten werden trotzdem gespeichert.";
+        sendForm();
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          form.lat.value = pos.coords.latitude;
+          form.lon.value = pos.coords.longitude;
+          sendForm();
+        },
+        err => {
+          statusEl.innerHTML = '<span class="error">GPS konnte nicht erfasst werden. Daten werden trotzdem gespeichert.</span>';
+          sendForm();
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    }
+
+    function sendForm() {
+      const data = new FormData(form);
+
+      fetch("https://script.google.com/macros/s/AKfycbz9vwXTJp1M-tchFA8HrSTFvvWycOOLVYmsvdapyJcv22gj1OF4RQV9noILHRTl46MH/exec", {
+        method: "POST",
+        body: data
+      })
+      .then(resp => {
+        statusEl.textContent = "Gesendet! Danke für deine Teilnahme.";
+        form.reset();
+      })
+      .catch(err => {
+        statusEl.innerHTML = '<span class="error">Fehler beim Senden. Bitte Seite neu laden und erneut versuchen.</span>';
+        console.error(err);
+      });
+    }
+
+    form.addEventListener("submit", getLocationAndSubmit);
+  </script>
+</body>
+</html>
