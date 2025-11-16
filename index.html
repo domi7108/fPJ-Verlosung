@@ -21,7 +21,9 @@
   - Nur Medizinstudierende der Uni Tübingen können teilnehmen.<br>
   - Umfrage vor Ort ausfüllen (GPS wird abgefragt).<br>
   - Gewinner werden per Mail benachrichtigt.<br><br>
-  Danke, dass ihr euch für ein faires PJ stark macht!
+  Danke, dass ihr euch für ein faires PJ stark macht!<br><br>
+  Wenn keine Fehlermeldung, aber ein Hinweis kommt, müsste alles passen.<br>
+  Sonst gerne eine Mail schreiben an d.hosek@fachschaftmedizin.de
 </p>
 
 <form id="form">
@@ -44,7 +46,8 @@
 
   <label>
     <input type="checkbox" name="terms" required>
-    Teilnahmebedingungen / Einmalteilnahme
+    Teilnahmebedingungen / Einmalteilnahme <br>
+    Ich willige ein, dass meine Angaben (Name, studentische E‑Mail) und mein Standort (Koordinaten, Zeitpunkt) zur Prüfung meiner Anwesenheit und zur Durchführung der Verlosung verarbeitet werden. Die Daten werden ausschließlich für die Verlosung verwendet und spätestens 30 Tage nach Veranstaltung gelöscht. Verantwortliche Stelle: Dominik Hosek, d.hosek@fachschaftmedizin.de. Ich kann meine Einwilligung jederzeit widerrufen.
   </label>
 
   <button type="submit">Senden</button>
@@ -61,7 +64,7 @@ form.addEventListener("submit", e => {
 
   const sendData = () => {
     const data = new FormData(form);
-    fetch("https://script.google.com/macros/s/AKfycbz7v5mcgiF0_8UfrC3eDso3cmgP6xHTKwfI7Nz2BuAtaglMPyrnnQAIZr8k4U_0e2Uf/exec", {  // <-- hier Web-App URL einfügen
+    fetch("https://script.google.com/macros/s/AKfycbwj60Udsspt-SOiXeMc8S4K6XoLcFg5umvfhY--W-y0OsP-qYQ4mpte5_WXOPkcY8SF/exec", {  // <-- hier Web-App URL einfügen
       method: "POST",
       body: data
     })
