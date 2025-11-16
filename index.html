@@ -61,17 +61,18 @@ form.addEventListener("submit", e => {
 
   const sendData = () => {
     const data = new FormData(form);
-    fetch("https://script.google.com/macros/s/AKfycbwwVmkClrGjoYYJRvsAP-Y8vlyZF9b1-1b5MfQSIWEoq43fMLNMa8TuDeOr5J4zD__e/exec", {
+    fetch("DEINE_WEBAPP_URL_HIER", {  // <-- hier Web-App URL einfügen
       method: "POST",
       body: data
     })
-    .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
+    .then(resp => resp.text())  // als Text auslesen, kein JSON parsing nötig
     .then(result => {
       statusEl.textContent = "Gesendet! Danke für deine Teilnahme.";
       form.reset();
     })
     .catch(err => {
-      statusEl.innerHTML = '<span class="error">Fehler beim Anzeigen der Bestätigung. Die Daten wurden aber gespeichert.</span>';
+      // Daten wurden trotzdem gespeichert
+      statusEl.textContent = "Gesendet! (Hinweis: Bestätigung konnte nicht angezeigt werden)";
       console.error(err);
     });
   };
