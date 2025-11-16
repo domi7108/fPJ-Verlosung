@@ -13,7 +13,6 @@
     .error { color: red; font-weight: bold; }
   </style>
 </head>
-
 <body>
   <h2>Willkommen zum Meditickets Gewinnspiel!</h2>
   <p>
@@ -42,14 +41,12 @@
 
     <label>
       <input type="checkbox" name="consent" required>
-      Einwilligung zur Datenverarbeitung<br>
-      Ich willige ein, dass meine Angaben (Name, studentische E‑Mail) und mein Standort (Koordinaten, Zeitpunkt) zur Prüfung meiner Anwesenheit und zur Durchführung der Verlosung verarbeitet werden. Die Daten werden ausschließlich für die Verlosung verwendet und spätestens 30 Tage nach Veranstaltung gelöscht. Verantwortliche Stelle: Dominik Hosek, d.hosek@fachschaftmedizin.de. Ich kann meine Einwilligung jederzeit widerrufen.
+      Einwilligung zur Datenverarbeitung
     </label>
 
     <label>
       <input type="checkbox" name="terms" required>
-      Teilnahmebedingungen / Einmalteilnahme<br>
-      Ich habe die Teilnahmebedingungen gelesen und akzeptiere, dass nur eine Teilnahme pro Person erlaubt ist. Mehrfacheinsendungen können vom Gewinnspiel ausgeschlossen werden.
+      Teilnahmebedingungen / Einmalteilnahme
     </label>
 
     <button type="submit">Senden</button>
@@ -63,6 +60,7 @@
     function getLocationAndSubmit(e) {
       e.preventDefault();
       statusEl.textContent = "GPS wird abgefragt...";
+
       if (!navigator.geolocation) {
         statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Daten werden trotzdem gespeichert.";
         sendForm();
@@ -86,16 +84,17 @@
     function sendForm() {
       const data = new FormData(form);
 
-      fetch("https://script.google.com/macros/s/AKfycbxvpZFc3fxlN8T21kU_5ux7euMvIm1qpFshikCJYwH19gcNbPUK9edZjoXrcroGmsTr/exec", {
+      fetch("DEINE_GOOGLE_WEBAPP_URL_HIER", {
         method: "POST",
         body: data
       })
-      .then(resp => {
+      .then(resp => resp.json())  // JSON aus Apps Script auslesen
+      .then(result => {
         statusEl.textContent = "Gesendet! Danke für deine Teilnahme.";
         form.reset();
       })
       .catch(err => {
-        statusEl.innerHTML = '<span class="error">Fehler beim Senden. Bitte Seite neu laden und erneut versuchen.</span>';
+        statusEl.innerHTML = '<span class="error">Fehler beim Anzeigen der Bestätigung. Die Daten wurden aber gespeichert.</span>';
         console.error(err);
       });
     }
