@@ -61,7 +61,7 @@ form.addEventListener("submit", e => {
 
   const sendData = () => {
     const data = new FormData(form);
-    fetch("DEINE_WEBAPP_URL_HIER", {  // <-- hier Web-App URL einfügen
+    fetch("https://script.google.com/macros/s/AKfycbz7v5mcgiF0_8UfrC3eDso3cmgP6xHTKwfI7Nz2BuAtaglMPyrnnQAIZr8k4U_0e2Uf/exec", {  // <-- hier Web-App URL einfügen
       method: "POST",
       body: data
     })
