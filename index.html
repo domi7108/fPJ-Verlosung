@@ -14,92 +14,86 @@
   </style>
 </head>
 <body>
-  <h2>Willkommen zum Meditickets Gewinnspiel!</h2>
-  <p>
-    Für alle Studis aus Tübingen, die zur fPJ Demo gekommen sind!!<br><br>
-    <strong>Bitte beachten:</strong><br>
-    - Es können nur Medizinstudierende der Uni Tübingen teilnehmen.<br>
-    - Du musst die Umfrage unbedingt vor Ort bei der Demo ausfüllen, damit niemand schummelt (GPS wird einmalig abgefragt).<br>
-    - Wir losen zufällig aus und kontaktieren dich dann per Mail, falls du ein Ticket gewonnen hast.<br><br>
-    Danke, dass ihr euch mit uns zusammen für ein faires PJ stark macht!
-  </p>
+<h2>Willkommen zum Meditickets Gewinnspiel!</h2>
+<p>
+  Für alle Studis aus Tübingen, die zur fPJ Demo gekommen sind!!<br><br>
+  <strong>Bitte beachten:</strong><br>
+  - Nur Medizinstudierende der Uni Tübingen können teilnehmen.<br>
+  - Umfrage vor Ort ausfüllen (GPS wird abgefragt).<br>
+  - Gewinner werden per Mail benachrichtigt.<br><br>
+  Danke, dass ihr euch für ein faires PJ stark macht!
+</p>
 
-  <form id="form">
-    <label>Vorname</label>
-    <input name="first_name" type="text" required placeholder="Max">
+<form id="form">
+  <label>Vorname</label>
+  <input name="first_name" type="text" required placeholder="Max">
 
-    <label>Nachname</label>
-    <input name="last_name" type="text" required placeholder="Mustermann">
+  <label>Nachname</label>
+  <input name="last_name" type="text" required placeholder="Mustermann">
 
-    <label>Studentische Mailadresse (@student.uni-tuebingen.de)</label>
-    <input name="email" type="email" required placeholder="max@student.uni-tuebingen.de">
+  <label>Studentische Mailadresse (@student.uni-tuebingen.de)</label>
+  <input name="email" type="email" required placeholder="max@student.uni-tuebingen.de">
 
-    <label>Standortabfrage (Bitte GPS einschalten und im Browser zustimmen)</label>
-    <p class="small">GPS wird zur Prüfung deiner Anwesenheit verwendet. Ohne GPS können wir die Teilnahme nicht verifizieren.</p>
-    <input type="hidden" name="lat">
-    <input type="hidden" name="lon">
+  <input type="hidden" name="lat">
+  <input type="hidden" name="lon">
 
-    <label>
-      <input type="checkbox" name="consent" required>
-      Einwilligung zur Datenverarbeitung
-    </label>
+  <label>
+    <input type="checkbox" name="consent" required>
+    Einwilligung zur Datenverarbeitung
+  </label>
 
-    <label>
-      <input type="checkbox" name="terms" required>
-      Teilnahmebedingungen / Einmalteilnahme
-    </label>
+  <label>
+    <input type="checkbox" name="terms" required>
+    Teilnahmebedingungen / Einmalteilnahme
+  </label>
 
-    <button type="submit">Senden</button>
-    <p id="status" class="small"></p>
-  </form>
+  <button type="submit">Senden</button>
+  <p id="status" class="small"></p>
+</form>
 
-  <script>
-    const statusEl = document.getElementById("status");
-    const form = document.getElementById("form");
+<script>
+const statusEl = document.getElementById("status");
+const form = document.getElementById("form");
 
-    function getLocationAndSubmit(e) {
-      e.preventDefault();
-      statusEl.textContent = "GPS wird abgefragt...";
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  statusEl.textContent = "GPS wird abgefragt...";
 
-      if (!navigator.geolocation) {
-        statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Daten werden trotzdem gespeichert.";
-        sendForm();
-        return;
-      }
+  const sendData = () => {
+    const data = new FormData(form);
+    fetch("https://script.google.com/macros/s/AKfycbwwVmkClrGjoYYJRvsAP-Y8vlyZF9b1-1b5MfQSIWEoq43fMLNMa8TuDeOr5J4zD__e/exec", {
+      method: "POST",
+      body: data
+    })
+    .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
+    .then(result => {
+      statusEl.textContent = "Gesendet! Danke für deine Teilnahme.";
+      form.reset();
+    })
+    .catch(err => {
+      statusEl.innerHTML = '<span class="error">Fehler beim Anzeigen der Bestätigung. Die Daten wurden aber gespeichert.</span>';
+      console.error(err);
+    });
+  };
 
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          form.lat.value = pos.coords.latitude;
-          form.lon.value = pos.coords.longitude;
-          sendForm();
-        },
-        err => {
-          statusEl.innerHTML = '<span class="error">GPS konnte nicht erfasst werden. Daten werden trotzdem gespeichert.</span>';
-          sendForm();
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    }
-
-    function sendForm() {
-      const data = new FormData(form);
-
-      fetch("https://script.google.com/macros/s/AKfycbwwVmkClrGjoYYJRvsAP-Y8vlyZF9b1-1b5MfQSIWEoq43fMLNMa8TuDeOr5J4zD__e/exec", {
-        method: "POST",
-        body: data
-      })
-      .then(resp => resp.json())  // JSON aus Apps Script auslesen
-      .then(result => {
-        statusEl.textContent = "Gesendet! Danke für deine Teilnahme.";
-        form.reset();
-      })
-      .catch(err => {
-        statusEl.innerHTML = '<span class="error">Fehler beim Anzeigen der Bestätigung. Die Daten wurden aber gespeichert.</span>';
-        console.error(err);
-      });
-    }
-
-    form.addEventListener("submit", getLocationAndSubmit);
-  </script>
+  if (!navigator.geolocation) {
+    statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Daten werden trotzdem gespeichert.";
+    sendData();
+  } else {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        form.lat.value = pos.coords.latitude;
+        form.lon.value = pos.coords.longitude;
+        sendData();
+      },
+      err => {
+        statusEl.innerHTML = '<span class="error">GPS konnte nicht erfasst werden. Daten werden trotzdem gespeichert.</span>';
+        sendData();
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+});
+</script>
 </body>
 </html>
