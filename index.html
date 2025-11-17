@@ -23,7 +23,8 @@
   - Unbedingt GPS anschalten und im Browser den Standortzugriff zulassen <br>
   - Gewinner werden per Mail benachrichtigt.<br><br>
   Danke, dass ihr euch für ein faires PJ stark macht!<br><br>
-  Falls widerholt eine Fehlermeldung kommt, gerne eine Mail schreiben an d.hosek@fachschaftmedizin.de
+  Wenn keine Fehlermeldung, aber ein Hinweis kommt, müsste alles passen.<br>
+  Sonst gerne eine Mail schreiben an d.hosek@fachschaftmedizin.de
 </p>
 
 <form id="form">
@@ -41,7 +42,7 @@
 
   <label>
     <input type="checkbox" name="terms" required>
-    Ich habe die Teilnahmebedingungen gelesen und akzeptiere, dass nur eine Teilnahme pro Person erlaubt ist. Falls wir von einem Gerät verschiedene Namen registrieren, kann dies zu einem Ausschluss vom Gewinnspiel führen.
+    Ich habe die Teilnahmebedingungen gelesen und akzeptiere, dass nur eine Teilnahme pro Person erlaubt ist. Mehrfacheinsendungen können vom Gewinnspiel ausgeschlossen werden.
   </label>
 
   <label>
@@ -63,7 +64,7 @@ form.addEventListener("submit", e => {
 
   const sendData = () => {
     const data = new FormData(form);
-    fetch("https://script.google.com/macros/s/AKfycbxv_5oHmDR6qyT69U0mcDg-Jzwz9UMKQWBgNM4Fjs7-7Hf4b4IalHn1_Pax7kcR0wPe/exec", {  // <-- hier Web-App URL einfügen
+    fetch("https://script.google.com/macros/s/AKfycbyv3LOKqY8m3XBlK6z22CaHYQ478odg0y--oy4h4N6ha6E5smo5ms4jg2qLTU9hjso1/exec", {  // <-- hier Web-App URL einfügen
       method: "POST",
       body: data
     })
@@ -74,13 +75,13 @@ form.addEventListener("submit", e => {
     })
     .catch(err => {
       // Daten wurden trotzdem gespeichert
-      statusEl.textContent = "Gesendet! Danke dir für deine Teilnahme".;
+      statusEl.textContent = "Gesendet! (Hinweis: Bestätigung konnte nicht angezeigt werden)";
       console.error(err);
     });
   };
 
   if (!navigator.geolocation) {
-    statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Restliche Daten werden trotzdem gespeichert. Evtl.nochmal GPS aktivieren und im Browser zulassen, dann erneut auf Senden";
+    statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Daten werden trotzdem gespeichert.";
     sendData();
   } else {
     navigator.geolocation.getCurrentPosition(
