@@ -63,7 +63,7 @@ form.addEventListener("submit", e => {
 
   const sendData = () => {
     const data = new FormData(form);
-    fetch("https://script.google.com/macros/s/AKfycbwj60Udsspt-SOiXeMc8S4K6XoLcFg5umvfhY--W-y0OsP-qYQ4mpte5_WXOPkcY8SF/exec", {  // <-- hier Web-App URL einfügen
+    fetch("https://script.google.com/macros/s/AKfycbxv_5oHmDR6qyT69U0mcDg-Jzwz9UMKQWBgNM4Fjs7-7Hf4b4IalHn1_Pax7kcR0wPe/exec", {  // <-- hier Web-App URL einfügen
       method: "POST",
       body: data
     })
@@ -74,7 +74,7 @@ form.addEventListener("submit", e => {
     })
     .catch(err => {
       // Daten wurden trotzdem gespeichert
-      statusEl.textContent = "Gesendet! Danke dir für deine Teilnahme.;
+      statusEl.textContent = "Gesendet! Danke dir für deine Teilnahme".;
       console.error(err);
     });
   };
