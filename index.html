@@ -23,8 +23,7 @@
   - Unbedingt GPS anschalten und im Browser den Standortzugriff zulassen <br>
   - Gewinner werden per Mail benachrichtigt.<br><br>
   Danke, dass ihr euch für ein faires PJ stark macht!<br><br>
-  Wenn keine Fehlermeldung, aber ein Hinweis kommt, müsste alles passen.<br>
-  Sonst gerne eine Mail schreiben an d.hosek@fachschaftmedizin.de
+  Falls widerholt eine Fehlermeldung kommt, gerne eine Mail schreiben an d.hosek@fachschaftmedizin.de
 </p>
 
 <form id="form">
@@ -42,7 +41,7 @@
 
   <label>
     <input type="checkbox" name="terms" required>
-    Ich habe die Teilnahmebedingungen gelesen und akzeptiere, dass nur eine Teilnahme pro Person erlaubt ist. Mehrfacheinsendungen können vom Gewinnspiel ausgeschlossen werden.
+    Ich habe die Teilnahmebedingungen gelesen und akzeptiere, dass nur eine Teilnahme pro Person erlaubt ist. Falls wir von einem Gerät verschiedene Namen registrieren, kann dies zu einem Ausschluss vom Gewinnspiel führen.
   </label>
 
   <label>
@@ -75,13 +74,13 @@ form.addEventListener("submit", e => {
     })
     .catch(err => {
       // Daten wurden trotzdem gespeichert
-      statusEl.textContent = "Gesendet! (Hinweis: Bestätigung konnte nicht angezeigt werden)";
+      statusEl.textContent = "Gesendet! Danke für deine Teilnahme.;
       console.error(err);
     });
   };
 
   if (!navigator.geolocation) {
-    statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Daten werden trotzdem gespeichert.";
+    statusEl.textContent = "GPS wird vom Browser nicht unterstützt. Restliche Daten werden trotzdem gespeichert. Evtl.nochmal GPS aktivieren und im Browser zulassen, dann erneut auf Senden";
     sendData();
   } else {
     navigator.geolocation.getCurrentPosition(
